@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Princess Splash Screen</title>
+<style>
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+  }
+
+  body {
+    background: linear-gradient(135deg, #ffdde1, #ee9ca7);
+    overflow: hidden;
+  }
+
+  /* 🌟 Splash Screen Container */
+  .splash {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    z-index: 999;
+    animation: splashFadeOut 1s ease forwards;
+    animation-delay: 8s; /* leaves after all animations */
+  }
+
+  /* 🌟 Sparkle Background */
+  .sparkles {
+    position: absolute;
+    width: 100%;
+    height: 80%;
+    background: url('./ICNM1920.JPG');
+    background-size: cover;
+    opacity: 0.3;
+    animation: sparkleMove 6s linear infinite;
+  }
+
+  @keyframes sparkleMove {
+    from { transform: translateY(0px); }
+    to { transform: translateY(-50px); }
+  }
+
+  /* 🌟 Logo Circle */
+  .logo {
+    width: 140px;
+    height: 140px;
+    background: white;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 55px;
+    font-weight: bold;
+    color: hotpink;
+    box-shadow: 0 0 20px rgba(255,0,80,0.5);
+    opacity: 0;
+    animation: logoPop 1s ease forwards 0.8s; /* step 1 */
+  }
+
+  /* 🌟 Princess Name */
+  .name {
+    margin-top: 25px;
+    font-size: 50px;
+    font-weight: bold;
+    letter-spacing: 3px;
+    color: white;
+    text-shadow: 0 0 10px red;
+    opacity: 0;
+    transform: translateY(40px);
+    animation: nameSlideIn 1s ease forwards 2s; /* step 2 */
+  }
+
+  /* 🌟 Underline */
+  .underline {
+    width: 0;
+    height: 5px;
+    background: red;
+    margin-top: 10px;
+    border-radius: 2px;
+    animation: underlineGrow 1s ease forwards 3.5s; /* step 3 */
+  }
+
+  /* 🌟 Extra Sparkle Effects (floating hearts) */
+  .heart {
+    position: absolute;
+    font-size: 25px;
+    color: white;
+    opacity: 0.8;
+    animation: floatUp 6s linear infinite;
+  }
+
+  .heart:nth-child(1) { left: 10%; bottom: -40px; animation-delay: 0s; }
+  .heart:nth-child(2) { left: 30%; bottom: -50px; animation-delay: 1s; }
+  .heart:nth-child(3) { left: 50%; bottom: -60px; animation-delay: 2s; }
+  .heart:nth-child(4) { left: 70%; bottom: -70px; animation-delay: 3s; }
+  .heart:nth-child(5) { left: 85%; bottom: -80px; animation-delay: 4s; }
+
+  @keyframes floatUp {
+    from { transform: translateY(0) scale(1); opacity: 0.9; }
+    to { transform: translateY(-100vh) scale(1.5); opacity: 0; }
+  }
+
+  /* 🌟 Keyframes for each step */
+  @keyframes logoPop {
+    0% { opacity: 0; transform: scale(0.5); }
+    100% { opacity: 1; transform: scale(1.2); }
+  }
+
+  @keyframes nameSlideIn {
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes underlineGrow {
+    to { width: 150px; }
+  }
+
+  /* 🌟 Step 5 - Glow Pulse */
+  .glow {
+    animation: glowPulse 1.2s ease-in-out infinite alternate;
+  }
+
+  @keyframes glowPulse {
+    0% { text-shadow: 0 0 10px hotpink; box-shadow: 0 0 10px hotpink; }
+    100% { text-shadow: 0 0 25px red; box-shadow: 0 0 25px red; }
+  }
+
+  /* 🌟 Step 6 - Splash fade out */
+  @keyframes splashFadeOut {
+    to { opacity: 0; visibility: hidden; }
+  }
+
+  /* 🌟 Main Content (hidden initially) */
+  .main-content {
+    display: none;
+    text-align: center;
+    padding-top: 50px;
+    color: #b3003c;
+  }
+</style>
+</head>
+<body>
+  <!-- Splash Screen -->
+  <div class="splash">
+    <div class="sparkles"></div>
+    <div class="logo">👑</div>
+    <div class="name">PRINCESS</div>
+    <div class="underline"></div>
+
+    <!-- Floating Hearts -->
+    <div class="heart">❤️</div>
+    <div class="heart">💖</div>
+    <div class="heart">💗</div>
+    <div class="heart">💞</div>
+    <div class="heart">💕</div>
+  </div>
+
+  <!-- Main Content -->
+  <div class="main-content">
+    <h1>✨ Welcome, Princess ✨</h1>
+    <p>Your magical journey begins now!</p>
+  </div>
+
+<script>
+  // Step 5: Glow effect starts after underline finishes
+  setTimeout(() => {
+    document.querySelector('.logo').classList.add('glow');
+    document.querySelector('.name').classList.add('glow');
+  }, 4500);
+
+  // Step 6: Reveal main content after splash fades out
+  setTimeout(() => {
+   window.location.href = "apex.html"
+  }, 9000);
+</script>
+</body>
+</html>

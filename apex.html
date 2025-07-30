@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Interactive Frenzy Dark Mode</title>
+<style>
+  body {
+    margin: 0;
+    background: #fff0f5;
+    overflow: hidden;
+    font-family: 'Poppins', sans-serif;
+    transition: background 1s ease, color 1s ease;
+  }
+
+  /* Frenzy background */
+  .frenzy {
+    position: fixed;
+    width: 100%;
+    height: 100vh;
+    overflow: hidden;
+    top: 0;
+    left: 0;
+    z-index: 1;
+  }
+
+  .shape {
+    position: absolute;
+    font-size: 28px;
+    animation: floatUp 6s linear infinite, spin 4s linear infinite;
+    opacity: 0.8;
+  }
+
+  @keyframes floatUp {
+    0% { transform: translateY(100vh) scale(0.8); opacity: 1; }
+    100% { transform: translateY(-50px) scale(1.3); opacity: 0; }
+  }
+
+  @keyframes spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+  }
+
+  /* Center content */
+  .center-content {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    text-align: center;
+  }
+
+  .center-content img {
+    width: 220px;
+    height: 220px;
+    border-radius: 50%;
+    object-fit: cover;
+    box-shadow: 0 0 20px rgba(255, 20, 147, 0.5);
+    margin-bottom: 15px;
+  }
+
+  .mid-text {
+    font-size: 20px;
+    font-weight: bold;
+    color: #d6336c;
+    margin-bottom: 20px;
+  }
+
+  .button-group {
+    display: flex;
+    gap: 30px;
+    margin-top: 10px;
+  }
+
+  .btn {
+    padding: 12px 30px;
+    font-size: 18px;
+    font-weight: bold;
+    border: none;
+    border-radius: 30px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+  }
+
+  .btn-yes {
+    background: #ff3366;
+    color: white;
+    box-shadow: 0 0 10px rgba(255, 51, 102, 0.6);
+  }
+  .btn-no {
+    background: #fff;
+    color: #ff3366;
+    border: 2px solid #ff3366;
+  }
+
+  /* Floating feedback text */
+  .floating-text {
+    position: fixed;
+    top: 50px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(255, 51, 102, 0.9);
+    color: white;
+    padding: 12px 25px;
+    border-radius: 25px;
+    font-weight: bold;
+    font-size: 18px;
+    z-index: 3;
+    animation: floatText 2s ease-in-out infinite alternate;
+    display: none;
+  }
+
+  @keyframes floatText {
+    from { transform: translate(-50%, 0); }
+    to { transform: translate(-50%, 50px); }
+  }
+
+  /* Dark overlay */
+  .dark-overlay {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: #000;
+    opacity: 0;
+    z-index: 999;
+    transition: opacity 1s ease;
+    display: none;
+  }
+
+  /* Video Stage */
+  .video-stage {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%;
+    height: 100%;
+    background: #000;
+    z-index: 1000;
+    display: none;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    overflow: hidden;
+  }
+
+  .video-stage video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    position: absolute;
+    top: 0;
+    left: 0;
+  }
+
+  /* Floating text for video */
+  .video-floating-text {
+    position: absolute;
+    bottom: -50px;
+    font-size: 14px;
+    font-weight: bold;
+    color: #fff;
+    opacity: 0;
+    animation: textFloat 5s linear forwards;
+    text-shadow: 0 0 5px rgba(255,255,255,0.6);
+  }
+
+  @keyframes textFloat {
+    0% { transform: translateY(0); opacity: 0; }
+    20% { opacity: 1; }
+    80% { opacity: 1; }
+    100% { transform: translateY(-120px); opacity: 0; }
+  }
+
+  /* Final dark mode */
+  .final-dark-body {
+    background: #111;
+    color: #eee;
+    text-align: center;
+    font-family: 'Poppins', sans-serif;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+  }
+  .final-dark-body h1 {
+    font-size: 3rem;
+    color: #ff3366;
+  }
+</style>
+</head>
+<body>
+
+<!-- 🎵 BACKGROUND MUSIC -->
+<audio id="bgMusic" src="./Ayra-Starr-Hot-Body-(TrendyBeatz.com).mp3" loop></audio>
+
+<!-- EVERYTHING ELSE IS INSIDE #app SO MUSIC NEVER GETS REMOVED -->
+<div id="app">
+
+  <!-- Background frenzy -->
+  <div class="frenzy"></div>
+
+  <!-- Floating text -->
+  <div class="floating-text" id="floatingText">Click a button!</div>
+
+  <!-- Main content -->
+  <div class="center-content" id="mainContent">
+    <img src="./hey.gif" alt="Center Image">
+    <div class="mid-text" id="midText">Hello Beautiful Princess</div>
+    <div class="button-group">
+      <button class="btn btn-yes" id="yesBtn">YES</button>
+      <button class="btn btn-no" id="noBtn">NO</button>
+    </div>
+  </div>
+
+  <!-- Dark overlay -->
+  <div class="dark-overlay" id="darkOverlay"></div>
+
+  <!-- Video stage -->
+  <div class="video-stage" id="videoStage">
+    <video id="stageVideo" autoplay muted></video>
+  </div>
+
+</div> <!-- END OF APP -->
+
+<script>
+/* 🎵 Start music & handle browser autoplay block */
+const bgMusic = document.getElementById('bgMusic');
+bgMusic.volume = 0.5; // softer start
+bgMusic.play().catch(() => {
+  document.addEventListener('click', () => {
+    bgMusic.play();
+  }, { once: true });
+});
+
+/* 🎇 Floating shapes */
+const frenzy = document.querySelector('.frenzy');
+const shapes = ['❤️','💖','✨','⭐','💫','🌸','💕','❣️','🌟','💎'];
+setInterval(() => {
+  const span = document.createElement('span');
+  span.classList.add('shape');
+  span.innerText = shapes[Math.floor(Math.random() * shapes.length)];
+  span.style.left = Math.random() * window.innerWidth + 'px';
+  span.style.animationDuration = (3 + Math.random() * 5) + 's';
+  frenzy.appendChild(span);
+  setTimeout(() => span.remove(), 8000);
+}, 300);
+
+/* 🎯 Buttons logic */
+const yesBtn = document.getElementById('yesBtn');
+const noBtn = document.getElementById('noBtn');
+const floatingText = document.getElementById('floatingText');
+const midText = document.getElementById('midText');
+
+const darkOverlay = document.getElementById('darkOverlay');
+const videoStage = document.getElementById('videoStage');
+const stageVideo = document.getElementById('stageVideo');
+
+let yesClicks = 0;
+let noClicks = 0;
+
+const yesMessages = ["You clicked YES!","I'm not letting you say YES!","Nah lie o!","I no go gree!","Oya you don win..."];
+const noMessages = ["You clicked NO!","Oh, NO again?","Make i carry you play small sha!","You sef leave the NO nah!","See ham, your mind don rest nah"];
+
+function randomMove(button) {
+  const randomTop = Math.random() * (window.innerHeight - 100);
+  const randomLeft = Math.random() * (window.innerWidth - 100);
+  button.style.position = 'fixed';
+  button.style.top = randomTop + 'px';
+  button.style.left = randomLeft + 'px';
+}
+
+yesBtn.addEventListener('click', () => {
+  yesClicks++;
+  floatingText.style.display = 'block';
+  floatingText.innerText = yesMessages[Math.min(yesClicks - 1, yesMessages.length - 1)];
+
+  if (yesClicks < 5) {
+    randomMove(yesBtn);
+    midText.innerText = "YES is escaping!";
+  } else {
+    triggerDarkTheme();
+  }
+});
+
+noBtn.addEventListener('click', () => {
+  noClicks++;
+  floatingText.style.display = 'block';
+  floatingText.innerText = noMessages[Math.min(noClicks - 1, noMessages.length - 1)];
+
+  if (noClicks < 5) {
+    randomMove(noBtn);
+    midText.innerText = "As you rush go press NO now, wetin you gain!";
+  } else {
+    noBtn.style.display = 'none';
+    midText.innerText = "NO has vanished!";
+  }
+});
+
+/* 🎬 DARK THEME SEQUENCE */
+function triggerDarkTheme() {
+  darkOverlay.style.display = 'block';
+  setTimeout(() => { darkOverlay.style.opacity = 1; }, 50);
+
+  setTimeout(() => {
+    document.getElementById('mainContent').remove();
+    darkOverlay.style.opacity = 0;
+    setTimeout(() => darkOverlay.style.display = 'none', 1000);
+    startVideoSequence();
+  }, 1500);
+}
+
+/* 🎥 Video sequence */
+const video1Texts = ["Hot", "Sexy", "Gorgeous", "So fine", "Splendious"];
+const video2Texts = ["High class", "Sweet body", "Amazing Shape and size", "Droling", "Peak"];
+
+function startVideoSequence() {
+  videoStage.style.display = 'flex';
+
+  // First video
+  stageVideo.src = "ICBI8816.MP4";
+  startFloatingTexts(video1Texts);
+
+  setTimeout(() => {
+    fadeToSecondVideo();
+  }, 12000);
+}
+
+function fadeToSecondVideo() {
+  videoStage.style.opacity = 0;
+  setTimeout(() => {
+    stageVideo.src = "SWNJ3549.mp4";
+    videoStage.style.opacity = 1;
+    startFloatingTexts(video2Texts);
+
+    setTimeout(() => {
+      showFinalDarkBody();
+    }, 12000);
+  }, 1000);
+}
+
+/* ✨ Floating texts for videos */
+function startFloatingTexts(textArray) {
+  const interval = setInterval(() => {
+    if (videoStage.style.display === "none") {
+      clearInterval(interval);
+      return;
+    }
+
+    const text = document.createElement('div');
+    text.classList.add('video-floating-text');
+    text.innerText = textArray[Math.floor(Math.random() * textArray.length)];
+    text.style.left = Math.random() * (window.innerWidth - 100) + 'px';
+    videoStage.appendChild(text);
+
+    setTimeout(() => text.remove(), 7000);
+  }, 1000);
+}
+
+/* 🌑 Final body */
+function showFinalDarkBody() {
+  document.getElementById('app').innerHTML = `
+    <div class="final-dark-body">
+      <p>Should make it longer and should make more</p>
+    </div>
+  `;
+  document.body.style.background = "#111";
+}
+</script>
+
+</body>
+</html>
